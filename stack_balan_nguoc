@@ -1,0 +1,161 @@
+#include <iostream>       
+#include <stack>    
+#include<queue>
+#include<string>
+using namespace std;
+int main()
+{
+
+	string a;
+	getline(cin, a);
+	stack<char> mystack;
+	stack<char> mystack1;
+	stack<char> mystack2;
+	stack<char> mystack3;
+	int o = 0;
+	int k = a.length();
+	for (int i = 0; i < k; i++)
+	{
+
+		if (a[i] >= 48 && a[i] <= 58)
+		{
+			cout << a[i];
+			mystack1.push(a[i]);
+			o++;
+		}
+		if (a[i] == '(')
+			mystack.push(a[i]);
+
+		if (a[i] == '+' || a[i] == '-' || a[i] == '*' || a[i] == '/')
+		{
+			if (mystack.empty())
+			{
+				mystack.push(a[i]);
+				continue;
+			}
+			if (mystack.top() == '/' || mystack.top() == '*' || mystack.top() == '-' || mystack.top() == '+')
+			{
+
+				if (((mystack.top() == '/' || mystack.top() == '*') && (a[i] == '*' || a[i] == '/')) || ((mystack.top() == '/' || mystack.top() == '*' || mystack.top() == '-' || mystack.top() == '+') && (a[i] == '+' || a[i] == '-')))
+				{
+					cout << mystack.top();
+					mystack1.push(mystack.top());
+					o++;
+					mystack.pop();
+				}
+
+			}
+			mystack.push(a[i]);
+		}
+
+		if (a[i] == ')')
+		{
+			while (mystack.top() != '(')
+			{
+				cout << mystack.top();
+				mystack1.push(mystack.top());
+				o++;
+				mystack.pop();
+			}
+			if (mystack.top() == '(')
+				mystack.pop();
+		}
+	}
+	while (!mystack.empty())
+	{
+		cout << mystack.top();
+		mystack1.push(mystack.top());
+		o++;
+		mystack.pop();
+	}
+	for (int i = 0; i < o; i++)
+	{
+		mystack2.push(mystack1.top());
+		mystack1.pop();
+	}
+	queue<char> queue;
+
+
+	int dutru[4];
+	int u = 0;
+	int s = 0;
+
+
+	while (mystack2.empty() != true)
+	{
+		int l[3];
+		int dem = 0;
+		if (s != 0)
+		{
+			cout << endl << s;
+			l[0] = s;
+			dem = 1;
+		}
+		cout << "|" << dem << "|";
+		while (!(mystack2.top() == '/' || mystack2.top() == '*' || mystack2.top() == '-' || mystack2.top() == '+'))
+		{
+			char x = mystack2.top();
+			int k = x - 48;
+			l[dem] = k;
+			dem++;
+			mystack2.pop();
+
+		}
+		cout << "|" << dem << "|";
+		if (dem == 3)
+		{
+			char q = l[0] + 48;
+			mystack3.push(q);
+			u++;
+			if (mystack2.top() == '/')
+				s = l[1] / l[2];
+			if (mystack2.top() == '-')
+				s = l[1] - l[2];
+			if (mystack2.top() == '+')
+				s = l[1] + l[2];
+			if (mystack2.top() == '*')
+				s = l[1] * l[2];
+			mystack2.pop();
+		}
+		if (dem == 2)
+		{
+			if (mystack2.top() == '/')
+				s = l[0] / l[1];
+			if (mystack2.top() == '-')
+				s = l[0] - l[1];
+			if (mystack2.top() == '+')
+				s = l[0] + l[1];
+			if (mystack2.top() == '*')
+				s = l[0] * l[1];
+			mystack2.pop();
+		}
+		/*if (dem == 1)
+		{
+			l[1]=
+			if (mystack2.top() == '/')
+				s = dutru[0] / l[0];
+			if (mystack2.top() == '-')
+				s = dutru[0] - l[0];
+			if (mystack2.top() == '+')
+				s = dutru[0] + l[0];
+			if (mystack2.top() == '*')
+				s = dutru[0] * l[0];
+			mystack2.pop();
+		}*/
+		if (dem == 1)
+		{
+			char q = s + 48;
+			mystack3.push(q);
+			u++;
+			s = 0;
+			for (; u > 0; u--)
+			{
+				mystack2.push(mystack3.top());
+				mystack3.pop();
+			} 
+
+		}
+	}
+	cout << endl << s;
+	return 0;
+}
